@@ -6,7 +6,7 @@ function FTFacepressOptionPage(){
 	if (isSet($_POST["action"]) && $_POST["action"] == "fb-status-update") {
 
 		$Facepress_data = array();
-		$Facepress_data[0] = "";
+		$Facepress_data[0] = "FT-FacePress1.1";
 		$array_keys = array_keys($_POST);
 		for( $i=0;$i<count($array_keys);$i++ ) {
 // 			echo '<br />' . $array_keys[$i] . ' - ' . $_POST[$array_keys[$i]] . '<br />';
@@ -16,6 +16,7 @@ function FTFacepressOptionPage(){
  			if ( substr($array_keys[$i],0,6) == 'fbpost') { 
     $keyString = 'fbpst:true'; }
  			if ( substr($array_keys[$i],0,6) == 'fbwall') { $keyString = 'fbwal:'; }
+			if ( substr($array_keys[$i],0,7) == 'fbshort') { $keyString = 'fbsho:'; }
 
  			array_push($Facepress_data, $keyString . $_POST[$array_keys[$i]]);
 		}
@@ -100,8 +101,13 @@ $Facepress_data = get_option("Facepress_options", $Facepress_data);
 						<tr valign="top">
 							<td><label for="fb-wall-id"><strong>Facebook Page</strong></label></td>
 							<td><input style="width: 250px;" id="fbwall-id-<?php echo $author->ID; ?>" name="fbwall-id-<?php echo $author->ID; ?>" type="text" value="<?php $optionIndex = array_search('wplog:' . $curauth->user_login, $Facepress_data); if ($optionIndex) { if ( substr($Facepress_data[$optionIndex+3],0,6) == 'fbwal:' ) { echo substr($Facepress_data[$optionIndex+3],6,strlen($Facepress_data[$optionIndex+3])-6); } else { echo substr($Facepress_data[$optionIndex+4],6,strlen($Facepress_data[$optionIndex+4])-6); } } ?>" /></td>
-							<td>Optional Page ID where you want to publish your post information. You can find your Facebook Page ID here: <br />http://www.facebook.com/pages/YourPageName/<strong>1234567890</strong>?ref=ts<br /><strong>If you are not an administrator for the specified Facebook Page, the plugin will not do anything and Facebook may ban you.</strong></td>
+							<td>Optional <b>numeric</b> Page ID where you want to publish your post information. You can find your numeric Facebook Page ID in the page URL: <br />http://www.facebook.com/pages/YourPageName/<strong>1234567890</strong>?ref=ts<br />If the numeric Facebook Page ID is not displayed in your page URL, then choose "Edit Page" from the left side Facebook menu (under the page picture). The numeric id will be listed in the "Edit Page" URL.<br /><strong>If you are not an administrator for the specified Facebook Page, the plugin will not do anything and Facebook may ban you.</strong></td>
 						</tr>
+						<tr valign="top">
+							<td><label for="fb-shorten-url"><strong>Use Shortened URLs</strong></label></td>
+							<td><input id="fbshort-<?php echo $author->ID; ?>" name="fbshort-<?php echo $author->ID; ?>" type="checkbox" value="" <?php $optionIndex = array_search('wplog:' . $curauth->user_login, $Facepress_data); if ($optionIndex) { if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbsho:' or substr($Facepress_data[$optionIndex+5],0,6) == 'fbsho:') { echo 'checked="checked"'; } } ?>" /></td>
+							<td>If you check this box and the <a href\"http://wordpress.org/extend/plugins/twitter-friendly-links/\">Twitter Friendly Links Plugin</a> is installed, then FacePress will post a shortened form of your post URL instead of the full URL.</td>
+						</tr>                        
 					</table>
 				</div>
 			</div>
@@ -130,7 +136,7 @@ function FTFacepressUserProfilePage(){
 	$Facepress_data = get_option("Facepress_options", $Facepress_data);
 	if ( count($Facepress_data) == 0 )
 	{
-		array_push($Facepress_data, '');
+		array_push($Facepress_data, 'FT-Facepress1.1');
 	}
 
 	if (isSet($_POST["action"]) && $_POST["action"] == "fb-status-update") 
@@ -181,6 +187,10 @@ function FTFacepressUserProfilePage(){
 		{
 			arraypush($Facepress_data, 'fbwal:');
 		}
+		if (isSet($_POST["fbshort"]))
+		{
+			array_push($Facepress_data, 'fbsho:' . 'true');
+		}
 		array_push($Facepress_data, '-placeholder1-');
 		array_push($Facepress_data, '-placeholder2-');
 		update_option("Facepress_options", $Facepress_data);
@@ -193,6 +203,7 @@ function FTFacepressUserProfilePage(){
 	$fbUserPassword = '';
 	$fbPostToProfile = 'false';
 	$facebookPageID = '';
+	$fbShortenURL = 'false';
 
 	if ($optionIndex)
 	{
@@ -212,6 +223,20 @@ function FTFacepressUserProfilePage(){
 		else
 		{
 			$facebookPageID = substr($Facepress_data[$optionIndex+4],6,strlen($Facepress_data[$optionIndex+4])-6); 
+		}
+		if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbsho:' ) 
+		{	
+			if ( substr($Facepress_data[$optionIndex+4],6,4) == 'true' )
+			{
+				$fbShortenURL = 'true';
+			}
+		}
+		if ( substr($Facepress_data[$optionIndex+5],0,6) == 'fbsho:' ) 
+		{	
+			if ( substr($Facepress_data[$optionIndex+5],6,4) == 'true' )
+			{
+				$fbShortenURL = 'true';
+			}
 		}
 	}
 ?>
@@ -269,7 +294,12 @@ function FTFacepressUserProfilePage(){
 						<tr valign="top">
 							<td><label for="fb-wall-id"><strong>Facebook Page</strong></label></td>
 							<td><input style="width: 250px;" id="fbwall-id" name="fbwall-id" type="text" value="<?php echo $facebookPageID; ?>" /></td>
-							<td>Optional Page ID where you want to publish your post information. You can find your Facebook Page ID here: <br />http://www.facebook.com/pages/YourPageName/<strong>1234567890</strong>?ref=ts<br /><strong>If you are not an administrator for the specified Facebook Page, the plugin will not do anything and Facebook may ban you.</strong></td>
+							<td>Optional <b>numeric</b> Page ID where you want to publish your post information. You can find your numeric Facebook Page ID in the page URL: <br />http://www.facebook.com/pages/YourPageName/<strong>1234567890</strong>?ref=ts<br />If the numeric Facebook Page ID is not displayed in your page URL, then choose "Edit Page" from the left side Facebook menu (under the page picture). The numeric id will be listed in the "Edit Page" URL.<br /><strong>If you are not an administrator for the specified Facebook Page, the plugin will not do anything and Facebook may ban you.</strong></td>
+						</tr>
+						<tr valign="top">
+							<td><label for="fb-shorten"><strong>Use Shortened URLs</strong></label></td>
+							<td><input id="fbshort" name="fbshort" type="checkbox" value="" <?php if ($fbShortenURL == 'true' ) { echo 'checked="checked"'; } ?> /></td>
+							<td>If you check this box and the <a href\"http://wordpress.org/extend/plugins/twitter-friendly-links/\">Twitter Friendly Links Plugin</a> is installed, then FacePress will post a shortened form of your post URL instead of the full URL.</td>
 						</tr>
 					</table>
 				</div>

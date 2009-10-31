@@ -1,10 +1,10 @@
-=== FT FacePress ===
-Contributors: aknox, fullthrottledevelopment
+=== FT-FacePress ===
+Contributors: aknox
 Donate link: http://fullthrottledevelopment.com
 Tags: facebook, status, wall, authors, users, update, social networks, marketing, social network marketing
 Requires at least: 2.8
 Tested up to: 2.8
-Stable tag: 1.0
+Stable tag: 1.1
 
 Publish your post information by author to your Facebook profile status or to a Facebook Page.
 
@@ -22,6 +22,10 @@ This plugin publishes the title of your post as the status of your Facebook prof
 4.   The file FacepressSessionFile.txt file in the /wp-content/plugins/ft-facepress/ folder must writable from PHP  
 
 == Changelog ==    
+
+= 1.1 =
+* Added option to shorten URLs using "Twitter Friendly Links" plugin
+
 = 1.0 =    
 * First public release.    
    

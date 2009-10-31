@@ -23,7 +23,33 @@ function FacepressUpdate($post_ID, $cron = false) {
 			return;
 		}
 
-		$postUrl = get_permalink($post_ID);
+		$fbShortenURL = 'false';
+
+		if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbsho:' ) 
+		{	
+			if ( substr($Facepress_data[$optionIndex+4],6,4) == 'true' )
+			{
+				$fbShortenURL = 'true';
+			}
+		}
+		if ( substr($Facepress_data[$optionIndex+5],0,6) == 'fbsho:' ) 
+		{	
+			if ( substr($Facepress_data[$optionIndex+5],6,4) == 'true' )
+			{
+				$fbShortenURL = 'true';
+			}
+		}
+
+		$plugins = get_option('active_plugins');
+		$required_plugin = 'twitter-friendly-links/twitter-friendly-links.php';
+		//check to see if Twitter Friendly Links plugin is activated			
+		if ( ( $fbShortenURL == 'true' ) && in_array( $required_plugin , $plugins ) ) {
+			$postUrl = permalink_to_twitter_link(get_permalink($post_ID)); // if yes, we want to use that for our URL shortening service.
+		}
+		else {
+			$postUrl = get_permalink($post_ID);
+		}
+		
 		$postTitle = $post->post_title;
 		$postStatus = $post->post_status;
 		unset($post);
