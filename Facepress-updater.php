@@ -10,6 +10,10 @@ function FacepressUpdate($post_ID, $cron = false) {
 	$authorID = $post->post_author;
 	$authorLogin = get_the_author_meta('user_login', $authorID);
 
+	$exclude = get_post_meta($post_ID, 'facepress_exclude', true);
+	
+	if ((int)$exclude == 1) return;
+
 	$optionIndex = array_search('wplog:' . $authorLogin, $Facepress_data);
 
 	if ($optionIndex && $post->post_type == 'post') 

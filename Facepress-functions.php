@@ -21,7 +21,7 @@ function getPage($url, $postData = null, $username = null, $password = null) {
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	if(!ini_get('safe_mode')) {
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
 	}
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_COOKIEJAR, $fbStatusCookieFile);

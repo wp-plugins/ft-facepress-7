@@ -4,7 +4,7 @@ Donate link: http://fullthrottledevelopment.com
 Tags: facebook, status, wall, authors, users, update, social networks, marketing, social network marketing
 Requires at least: 2.8
 Tested up to: 2.8
-Stable tag: 1.1
+Stable tag: 1.2
 
 Publish your post information by author to your Facebook profile status or to a Facebook Page.
 
@@ -22,6 +22,11 @@ This plugin publishes the title of your post as the status of your Facebook prof
 4.   The file FacepressSessionFile.txt file in the /wp-content/plugins/ft-facepress/ folder must writable from PHP  
 
 == Changelog ==    
+
+= 1.2 =
+* Added ability to choose not to publish a particular post to Facebook using post options
+* Fixed problem with sites that have renamed the original "admin" user.
+* Fixed a few other bugs.
 
 = 1.1 =
 * Added option to shorten URLs using "Twitter Friendly Links" plugin

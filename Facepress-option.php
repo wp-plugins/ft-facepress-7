@@ -41,7 +41,7 @@ function FTFacepressOptionPage(){
 					<p>If "Publish to Facebook Profile Status" is unchecked and there is nothing entered in the Page Id field, then nothing will be published to Facebook.</p>
 					<?php if (!is_writable($fbStatusCookieFile)) { ?>
 						<p class="error">Php/Wordpress cannot write into this file: <strong><?php echo($fbStatusCookieFile) ?></strong>. Please ensure PHP has the correct permissions set to write and update that file. If you don't know what I'm speaking about, please contact your server admin / webmaster. If you don't want to see this message every time you publish a new post while you try solving the problem, just <a href="/wp-admin/plugins.php">disable this plugin</a>. <a href="http://codex.wordpress.org/Changing_File_Permissions">More about file permissions on Wordpress</a></p>
-					<? } ?>
+					<?php } ?>
 
 					<p>* = required field</p>
 
@@ -62,17 +62,28 @@ $Facepress_data = get_option("Facepress_options", $Facepress_data);
 
 // Get the authors from the database ordered by user nicename
 	global $wpdb;
-	$query = "SELECT ID, user_nicename from $wpdb->users ORDER BY user_nicename";
+	
+	$query = "SELECT ID, user_login from $wpdb->users ORDER BY user_login";
 	$author_ids = $wpdb->get_results($query);
 
+//	print_r ($author_ids);
+	
 // Loop through each author
 	foreach($author_ids as $author) :
 
+    $user_cap = array();
+	$user_cap = get_usermeta($author->ID,'wp_capabilities');
+// 	print_r ($user_cap);
+//	if ($user_cap[subscriber] <> 1) echo '  not a subscriber  ';
+//	if ($user_cap[subscriber] == 1) echo '****SUBSCRIBER****';
+	
 	// Get user data
 		$curauth = get_userdata($author->ID);
+//		print_r (' / ' . $curauth->user_login . ' ' . $curauth->user_level . ' / ');
 
 	// If user level is above 0 or login name is "admin", display profile
-		if($curauth->user_level > 0 || $curauth->user_login == 'admin') : ?>
+//		if($curauth->user_level > 0 || $curauth->user_login == 'admin') : 
+		if($user_cap[subscriber] <> 1) : ?>
 
 
 <div class="wrap">
@@ -313,4 +324,50 @@ function FTFacepressUserProfilePage(){
 
 <?php
 }
+function facepress_meta_tags($id) {
+			$awmp_edit = $_POST["facepress_edit"];
+			
+			if (isset($awmp_edit) && !empty($awmp_edit)) {
+				$exclude = $_POST["facepress_exclude"];
+	
+				delete_post_meta($id, 'facepress_exclude');
+				
+				if (isset($exclude) && !empty($exclude)) {
+					add_post_meta($id, 'facepress_exclude', $exclude);
+				}
+			}
+		}
+		
+
+function facepress_add_meta_tags() {
+			global $post;
+			$post_id = $post;
+			
+			if (is_object($post_id)) {
+				$post_id = $post_id->ID;
+			}
+			
+            $exclude = get_post_meta($post_id, 'facepress_exclude', true); ?>
+	
+                    <div id="postrftp" class="postbox">
+                    <h3><?php _e('FacePress', 'facepress') ?></h3>
+                    <div class="inside">
+                    <div id="postrftp">
+		
+			<a target="__blank" href="http://fullthrottledevelopment.com/facepress"><?php _e('FT-FacePress', 'facepress') ?></a>
+			<input value="facepress_edit" type="hidden" name="facepress_edit" />
+			<table style="margin-bottom:40px">
+                <tr>
+                <th style="text-align:left;" colspan="2">
+                </th>
+                </tr>
+                
+                <tr><th scope="row" style="text-align:right; width:150px; padding-top: 5px; padding-right:10px;"><?php _e('Do Not Publish this Post to Facebook:', 'facepress') ?></th>
+                <td><input value="1" type="checkbox" name="facepress_exclude" <?php if ((int)$exclude == 1) echo "checked"; ?> /></td></tr>
+			</table>
+			
+			</div></div></div>
+	
+			<?php
+		}
 ?>
