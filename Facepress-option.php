@@ -6,9 +6,9 @@ function FTFacepressOptionPage(){
 	if (isSet($_POST["action"]) && $_POST["action"] == "fb-status-update") {
 
 		$Facepress_data = array();
-		$Facepress_data[0] = "FT-FacePress1.1";
+		$Facepress_data[0] = "FT-FacePress1.2.1";
 		$array_keys = array_keys($_POST);
-		for( $i=0;$i<count($array_keys);$i++ ) {
+		for( $i=0;$i<count($array_keys)-2;$i++ ) {
 // 			echo '<br />' . $array_keys[$i] . ' - ' . $_POST[$array_keys[$i]] . '<br />';
  			if ( substr($array_keys[$i],0,7) == 'wplogin') { $keyString = 'wplog:'; }
  			if ( substr($array_keys[$i],0,7) == 'fbemail') { $keyString = 'fbeml:'; }
@@ -16,7 +16,7 @@ function FTFacepressOptionPage(){
  			if ( substr($array_keys[$i],0,6) == 'fbpost') { 
     $keyString = 'fbpst:true'; }
  			if ( substr($array_keys[$i],0,6) == 'fbwall') { $keyString = 'fbwal:'; }
-			if ( substr($array_keys[$i],0,7) == 'fbshort') { $keyString = 'fbsho:'; }
+			if ( substr($array_keys[$i],0,7) == 'fbshort') { $keyString = 'fbsho:true'; }
 
  			array_push($Facepress_data, $keyString . $_POST[$array_keys[$i]]);
 		}
@@ -145,6 +145,8 @@ function FTFacepressUserProfilePage(){
 
 	$Facepress_data = array();
 	$Facepress_data = get_option("Facepress_options", $Facepress_data);
+//	 print_r ($Facepress_data);
+	 
 	if ( count($Facepress_data) == 0 )
 	{
 		array_push($Facepress_data, 'FT-Facepress1.1');
@@ -157,15 +159,16 @@ function FTFacepressUserProfilePage(){
 
 		if ($optionIndex)
 		{
-			if ( substr($Facepress_data[$optionIndex+3], 0, 6) != 'wplog:' )
+			$clearCount = 4;
+			if ( substr($Facepress_data[$optionIndex+3], 0, 6) == 'fbpst:' )
 			{
-				$tempArray = array_splice($Facepress_data, $optionIndex,3);
+				$clearCount++;
 			}
-			else
+			if (substr($Facepress_data[$optionIndex+4], 0, 6) == 'fbsho:' || substr($Facepress_data[$optionIndex+5], 0, 6) == 'fbsho:')
 			{
-				$tempArray = array_splice($Facepress_data, $optionIndex,4);
-
+				$clearCount++;
 			}
+			$tempArray = array_splice($Facepress_data, $optionIndex, $clearCount);
 		}
 
 		array_push($Facepress_data, 'wplog:' . $current_user->user_login);

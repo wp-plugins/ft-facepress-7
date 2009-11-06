@@ -65,15 +65,15 @@ function FacepressUpdate($post_ID, $cron = false) {
 
 		// clean the session data before starting
 		// the file should already be clean but... you never know if someone else touches it with some malicious plugin
-		deleteFbSessionData();
+		FTdeleteFbSessionData();
 
-		$loginResponse = getPage($loginUrl, $postData);
+		$loginResponse = FTgetPageProfile($loginUrl, $postData);
 
 		// if the redirect can't be followed due to php restrictions, add a second call to the FB home
 		if(ini_get('safe_mode')) 
 		{
 			$homeUrl = "http://m.facebook.com/home.php?locale=en_US";
-			$loginResponse = getPage($homeUrl);
+			$loginResponse = FTgetPageProfile($homeUrl);
 		}
 
 		if (strpos($loginResponse, "type=\"password\"") !== false) 		{
@@ -87,8 +87,8 @@ function FacepressUpdate($post_ID, $cron = false) {
 			{
 //			Post to profile
 
-	array_push($Facepress_data, 'post to profile');
-	update_option("Facepress_options", $Facepress_data);
+//	array_push($Facepress_data, 'post to profile');
+//	update_option("Facepress_options", $Facepress_data);
 
 
 				preg_match('/name="post_form_id" value="(.*?)"/i', $loginResponse, $postFormId);
@@ -99,7 +99,7 @@ function FacepressUpdate($post_ID, $cron = false) {
 					$postData = "post_form_id=".$postFormId[1]."&status=".urlencode($title)."&update=Update+Status&locale=en_US";
 					$statusFormUrl = "http://m.facebook.com/a/home.php?locale=en_US";
 
-					$updateResponse = getPage($statusFormUrl, $postData);
+					$updateResponse = FTgetPageProfile($statusFormUrl, $postData);
 				}
 			}
 		}
@@ -115,7 +115,7 @@ function FacepressUpdate($post_ID, $cron = false) {
 		}
 		if (strlen($facebookPageID) > 0)
 		{
-			$wallResponse = getPage("http://m.facebook.com/wall.php?id=".$facebookPageID."&locale=en_US");
+			$wallResponse = FTgetPagePage("http://m.facebook.com/wall.php?id=".$facebookPageID."&locale=en_US");
 			preg_match('/name="post_form_id" value="(.*?)"/i', $wallResponse, $postFormId);
 
 			if (isSet($postFormId[1])) 
@@ -124,7 +124,7 @@ function FacepressUpdate($post_ID, $cron = false) {
 				$statusFormUrl = "http://m.facebook.com/wall.php?id=".$facebookPageID."&locale=en_US";
 
 				// no way to check if this has gone right, FB do not return any message
-				$updateResponse = getPage($statusFormUrl, $postData);
+				$updateResponse = FTgetPagePage($statusFormUrl, $postData);
 
 			}
 		}
@@ -134,10 +134,10 @@ function FacepressUpdate($post_ID, $cron = false) {
 		return;
 	}
 
-	getPage("http://m.facebook.com/logout.php");
+	FTgetPageProfile("http://m.facebook.com/logout.php");
 
 	// everything has been done, clean the fbSessionData.txt file so that if someone tries to download it, it's empty
-	deleteFbSessionData();
+	FTdeleteFbSessionData();
 
 }
 ?>
