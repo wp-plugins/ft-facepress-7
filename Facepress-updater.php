@@ -44,6 +44,23 @@ function FacepressUpdate($post_ID, $cron = false) {
 			}
 		}
 
+		if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbfor:' ) 
+		{	
+			$fbPostFormat = substr($Facepress_data[$optionIndex+4],6,strlen($Facepress_data[$optionIndex+4])-6);		
+		}
+		elseif ( substr($Facepress_data[$optionIndex+5],0,6) == 'fbfor:' ) 
+		{	
+			$fbPostFormat = substr($Facepress_data[$optionIndex+5],6,strlen($Facepress_data[$optionIndex+5])-6);		
+		}
+		elseif ( substr($Facepress_data[$optionIndex+6],0,6) == 'fbfor:' ) 
+		{	
+			$fbPostFormat = substr($Facepress_data[$optionIndex+6],6,strlen($Facepress_data[$optionIndex+6])-6);	
+		}
+		else
+		{
+			$fbPostFormat = '%TITLE% %URL%';
+		}
+
 		$plugins = get_option('active_plugins');
 		$required_plugin = 'twitter-friendly-links/twitter-friendly-links.php';
 		//check to see if Twitter Friendly Links plugin is activated			
@@ -55,10 +72,26 @@ function FacepressUpdate($post_ID, $cron = false) {
 		}
 		
 		$postTitle = $post->post_title;
+		$postExcerpt = $post->post_excerpt;
 		$postStatus = $post->post_status;
 		unset($post);
-
-		$title = $postTitle." ".$postUrl;
+		
+		$title = $fbPostFormat;
+		
+		if (preg_match('%URL%',$title))
+		{
+			$title = str_ireplace("%URL%", $postUrl, $title);
+		}
+		if (preg_match('%TITLE%',$title))
+		{
+			$title = str_ireplace("%TITLE%", $postTitle, $title);
+		}
+		if (preg_match('%EXCERPT%',$title))
+		{
+			$title = str_ireplace("%EXCERPT%", $postExcerpt, $title);
+		}
+		
+//		$title = $postTitle." ".$postUrl;
 
 		$loginUrl = "https://login.facebook.com/login.php?m&locale=en_US&next=http://m.facebook.com/home.php%3Flocale=en_US";
 		$postData = "locale=en_US&email=".$fbUserEmail."&pass=".$fbUserPassword."&persistent=1&login=".urlencode("Log In");

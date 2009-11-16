@@ -4,7 +4,7 @@ Donate link: http://fullthrottledevelopment.com
 Tags: facebook, status, wall, authors, users, update, social networks, marketing, social network marketing
 Requires at least: 2.8
 Tested up to: 2.8
-Stable tag: 1.2.1
+Stable tag: 1.3
 
 Publish your post information by author to your Facebook profile status or to a Facebook Page.
 
@@ -23,6 +23,8 @@ This plugin publishes the title of your post as the status of your Facebook prof
 
 == Changelog ==    
 
+= 1.3 =
+* Added ability to format info published to Facebook including post title, post url, and post excerpt.
 
 = 1.2.1 =
 * Fixed some bugs that affected using "Twitter Friendly Links" and posting to Facebook profiles.

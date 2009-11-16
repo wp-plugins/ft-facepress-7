@@ -4,7 +4,7 @@ Plugin Name: FT FacePress
 Plugin URI: http://fullthrottledevelopment.com/facepress
 Description: This plugin publishes the title and permalink of your post as the status of your Facebook profile. Each WordPress author can setup his or her own Facebook access. Also, the WordPress post information can be published to a Facebook page for which the WordPress author is an administrator.
 Author: FullThrottle Development - Alan Knox
-Version: 1.2.1
+Version: 1.3
 Author URI: http://fullthrottledevelopment.com/
 */
 

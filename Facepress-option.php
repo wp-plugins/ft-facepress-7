@@ -17,6 +17,7 @@ function FTFacepressOptionPage(){
     $keyString = 'fbpst:true'; }
  			if ( substr($array_keys[$i],0,6) == 'fbwall') { $keyString = 'fbwal:'; }
 			if ( substr($array_keys[$i],0,7) == 'fbshort') { $keyString = 'fbsho:true'; }
+			if ( substr($array_keys[$i],0,8) == 'fbformat') { $keyString = 'fbfor:'; }
 
  			array_push($Facepress_data, $keyString . $_POST[$array_keys[$i]]);
 		}
@@ -119,6 +120,22 @@ $Facepress_data = get_option("Facepress_options", $Facepress_data);
 							<td><input id="fbshort-<?php echo $author->ID; ?>" name="fbshort-<?php echo $author->ID; ?>" type="checkbox" value="" <?php $optionIndex = array_search('wplog:' . $curauth->user_login, $Facepress_data); if ($optionIndex) { if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbsho:' or substr($Facepress_data[$optionIndex+5],0,6) == 'fbsho:') { echo 'checked="checked"'; } } ?>" /></td>
 							<td>If you check this box and the <a href\"http://wordpress.org/extend/plugins/twitter-friendly-links/\">Twitter Friendly Links Plugin</a> is installed, then FacePress will post a shortened form of your post URL instead of the full URL.</td>
 						</tr>                        
+						<tr valign="top">
+							<td><label for="fb-format"><strong>Post Format</strong></label></td>
+							<td><input style="width: 250px;" id="fbformat-<?php echo $author->ID; ?>" name="fbformat-<?php echo $author->ID; ?>" type="text" value="<?php $optionIndex = array_search('wplog:' . $curauth->user_login, $Facepress_data); 
+							if ($optionIndex) { 
+								if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbfor:' ) {
+									$formatDisplay = htmlspecialchars(substr($Facepress_data[$optionIndex+4],6,strlen($Facepress_data[$optionIndex+4])-6));
+									echo $formatDisplay; } 
+								elseif ( substr($Facepress_data[$optionIndex+5],0,6) == 'fbfor:' ) { 
+									$formatDisplay = htmlspecialchars(substr($Facepress_data[$optionIndex+5],6,strlen($Facepress_data[$optionIndex+5])-6));
+									echo $formatDisplay; } 
+								elseif ( substr($Facepress_data[$optionIndex+6],0,6) == 'fbfor:' ) { 
+									$formatDisplay = htmlspecialchars(substr($Facepress_data[$optionIndex+6],6,strlen($Facepress_data[$optionIndex+6])-6));
+									echo $formatDisplay; } 
+								else { echo '%TITLE% %URL%'; } } ?>" /></td>
+							<td>Describe the format you would like FacePress to use to publish your post information on Facebook. <strong>NOTE: Do not use quotation marks in your format.</strong><br />Use the following descriptors: <br />%TITLE% = the title of your post<br />%URL% = the url of your post<br />%EXCERPT% = the excerpt field of your post</td>
+						</tr>
 					</table>
 				</div>
 			</div>
@@ -168,6 +185,10 @@ function FTFacepressUserProfilePage(){
 			{
 				$clearCount++;
 			}
+			if (substr($Facepress_data[$optionIndex+4], 0, 6) == 'fbfor:' || substr($Facepress_data[$optionIndex+5], 0, 6) == 'fbfor:' || substr($Facepress_data[$optionIndex+6], 0, 6) == 'fbfor:')
+			{
+				$clearCount++;
+			}
 			$tempArray = array_splice($Facepress_data, $optionIndex, $clearCount);
 		}
 
@@ -204,6 +225,10 @@ function FTFacepressUserProfilePage(){
 		if (isSet($_POST["fbshort"]))
 		{
 			array_push($Facepress_data, 'fbsho:' . 'true');
+		}
+		if (isSet($_POST["fbformat"]))
+		{
+			array_push($Facepress_data, 'fbfor:' . trim($_POST["fbformat"]));
 		}
 		array_push($Facepress_data, '-placeholder1-');
 		array_push($Facepress_data, '-placeholder2-');
@@ -251,6 +276,22 @@ function FTFacepressUserProfilePage(){
 			{
 				$fbShortenURL = 'true';
 			}
+		}
+		if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbfor:' ) 
+		{
+			$facebookPostFormat = substr($Facepress_data[$optionIndex+4],6,strlen($Facepress_data[$optionIndex+4])-6); 
+		}
+		elseif ( substr($Facepress_data[$optionIndex+5],0,6) == 'fbfor:' ) 
+		{
+			$facebookPostFormat = substr($Facepress_data[$optionIndex+5],6,strlen($Facepress_data[$optionIndex+5])-6); 
+		}
+		elseif ( substr($Facepress_data[$optionIndex+6],0,6) == 'fbfor:' ) 
+		{
+			$facebookPostFormat = substr($Facepress_data[$optionIndex+6],6,strlen($Facepress_data[$optionIndex+6])-6); 
+		}
+		else
+		{
+			$facebookPostFormat = "%TITLE% %URL%";
 		}
 	}
 ?>
@@ -314,6 +355,11 @@ function FTFacepressUserProfilePage(){
 							<td><label for="fb-shorten"><strong>Use Shortened URLs</strong></label></td>
 							<td><input id="fbshort" name="fbshort" type="checkbox" value="" <?php if ($fbShortenURL == 'true' ) { echo 'checked="checked"'; } ?> /></td>
 							<td>If you check this box and the <a href\"http://wordpress.org/extend/plugins/twitter-friendly-links/\">Twitter Friendly Links Plugin</a> is installed, then FacePress will post a shortened form of your post URL instead of the full URL.</td>
+						</tr>
+						<tr valign="top">
+							<td><label for="fb-format"><strong>Post Fomrmat</strong></label></td>
+							<td><input style="width: 250px;" id="fbformat" name="fbformat" type="text" value="<?php echo $facebookPostFormat; ?>" /></td>
+							<td>Describe the format you would like FacePress to use to publish your post information on Facebook. <strong>NOTE: Do not use quotation marks in your format.</strong><br />Use the following descriptors: <br />%TITLE% = the title of your post<br />%URL% = the url of your post<br />%EXCERPT% = the excerpt field of your post</td>
 						</tr>
 					</table>
 				</div>
