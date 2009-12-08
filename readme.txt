@@ -1,5 +1,5 @@
 === FT-FacePress ===
-Contributors: aknox
+Contributors: aknox, fullthrottledevelopment
 Donate link: http://fullthrottledevelopment.com
 Tags: facebook, status, wall, authors, users, update, social networks, marketing, social network marketing
 Requires at least: 2.8
