@@ -134,7 +134,7 @@ $Facepress_data = get_option("Facepress_options", $Facepress_data);
 									$formatDisplay = htmlspecialchars(substr($Facepress_data[$optionIndex+6],6,strlen($Facepress_data[$optionIndex+6])-6));
 									echo $formatDisplay; } 
 								else { echo '%TITLE% %URL%'; } } ?>" /></td>
-							<td>Describe the format you would like FacePress to use to publish your post information on Facebook. <strong>NOTE: Do not use quotation marks in your format.</strong><br />Use the following descriptors: <br />%TITLE% = the title of your post<br />%URL% = the url of your post<br />%EXCERPT% = the excerpt field of your post</td>
+							<td>Describe the format you would like FacePress to use to publish your post information on Facebook. <strong>NOTE: Do not use double quotation marks in your format.</strong><br />Use the following descriptors: <br />%TITLE% = the title of your post<br />%URL% = the url of your post<br />%EXCERPT% = the excerpt field of your post</td>
 						</tr>
 					</table>
 				</div>
@@ -357,9 +357,9 @@ function FTFacepressUserProfilePage(){
 							<td>If you check this box and the <a href\"http://wordpress.org/extend/plugins/twitter-friendly-links/\">Twitter Friendly Links Plugin</a> is installed, then FacePress will post a shortened form of your post URL instead of the full URL.</td>
 						</tr>
 						<tr valign="top">
-							<td><label for="fb-format"><strong>Post Fomrmat</strong></label></td>
+							<td><label for="fb-format"><strong>Post Format</strong></label></td>
 							<td><input style="width: 250px;" id="fbformat" name="fbformat" type="text" value="<?php echo $facebookPostFormat; ?>" /></td>
-							<td>Describe the format you would like FacePress to use to publish your post information on Facebook. <strong>NOTE: Do not use quotation marks in your format.</strong><br />Use the following descriptors: <br />%TITLE% = the title of your post<br />%URL% = the url of your post<br />%EXCERPT% = the excerpt field of your post</td>
+							<td>Describe the format you would like FacePress to use to publish your post information on Facebook. <strong>NOTE: Do not use double quotation marks in your format.</strong><br />Use the following descriptors: <br />%TITLE% = the title of your post<br />%URL% = the url of your post<br />%EXCERPT% = the excerpt field of your post</td>
 						</tr>
 					</table>
 				</div>
@@ -378,11 +378,17 @@ function facepress_meta_tags($id) {
 			
 			if (isset($awmp_edit) && !empty($awmp_edit)) {
 				$exclude = $_POST["facepress_exclude"];
+				$format = $_POST["facepress_format"];
+				
 	
 				delete_post_meta($id, 'facepress_exclude');
+				delete_post_meta($id, 'facepress_format');
 				
 				if (isset($exclude) && !empty($exclude)) {
 					add_post_meta($id, 'facepress_exclude', $exclude);
+				}
+				if (isset($format) && !empty($format)) {
+					add_post_meta($id, 'facepress_format', $format);
 				}
 			}
 		}
@@ -396,7 +402,8 @@ function facepress_add_meta_tags() {
 				$post_id = $post_id->ID;
 			}
 			
-            $exclude = get_post_meta($post_id, 'facepress_exclude', true); ?>
+            $exclude = get_post_meta($post_id, 'facepress_exclude', true);
+            $format = get_post_meta($post_id, 'facepress_format', true); ?>
 	
                     <div id="postrftp" class="postbox">
                     <h3><?php _e('FacePress', 'facepress') ?></h3>
@@ -411,8 +418,16 @@ function facepress_add_meta_tags() {
                 </th>
                 </tr>
                 
-                <tr><th scope="row" style="text-align:right; width:150px; padding-top: 5px; padding-right:10px;"><?php _e('Do Not Publish this Post to Facebook:', 'facepress') ?></th>
-                <td><input value="1" type="checkbox" name="facepress_exclude" <?php if ((int)$exclude == 1) echo "checked"; ?> /></td></tr>
+                <tr>
+                	<th scope="row" style="text-align:right; width:150px; padding-top: 5px; padding-right:10px;"><?php _e('Do Not Publish this Post to Facebook:', 'facepress') ?></th>
+                	<td><input value="1" type="checkbox" name="facepress_exclude" <?php if ((int)$exclude == 1) echo "checked"; ?> /></td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" style="text-align:right; width:150px; padding-top: 5px; padding-right:10px;"><?php _e('Post Format', 'facepress') ?></th>
+					<td><input style="width: 250px;" id="fbformat" name="facepress_format" type="text" value="<?php echo $format ?>" /><br />
+					Describe the format you would like FacePress to use to publish this post information on Facebook. If this field is left blank, then FacePress will use the default posting format in your FacePress Options.<strong>NOTE: Do not use double quotation marks in your format.</strong><br />Use the following descriptors: <br />%TITLE% = the title of your post<br />%URL% = the url of your post<br />%EXCERPT% = the excerpt field of your post</td>
+				</tr>
+
 			</table>
 			
 			</div></div></div>

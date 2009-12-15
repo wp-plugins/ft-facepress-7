@@ -11,6 +11,7 @@ function FacepressUpdate($post_ID, $cron = false) {
 	$authorLogin = get_the_author_meta('user_login', $authorID);
 
 	$exclude = get_post_meta($post_ID, 'facepress_exclude', true);
+	$postFormat = get_post_meta($post_ID, 'facepress_format', true);
 	
 	if ((int)$exclude == 1) return;
 
@@ -44,23 +45,30 @@ function FacepressUpdate($post_ID, $cron = false) {
 			}
 		}
 
-		if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbfor:' ) 
-		{	
-			$fbPostFormat = substr($Facepress_data[$optionIndex+4],6,strlen($Facepress_data[$optionIndex+4])-6);		
-		}
-		elseif ( substr($Facepress_data[$optionIndex+5],0,6) == 'fbfor:' ) 
-		{	
-			$fbPostFormat = substr($Facepress_data[$optionIndex+5],6,strlen($Facepress_data[$optionIndex+5])-6);		
-		}
-		elseif ( substr($Facepress_data[$optionIndex+6],0,6) == 'fbfor:' ) 
-		{	
-			$fbPostFormat = substr($Facepress_data[$optionIndex+6],6,strlen($Facepress_data[$optionIndex+6])-6);	
+		if ($postFormat)
+		{
+			$fbPostFormat = $postFormat;
 		}
 		else
 		{
-			$fbPostFormat = '%TITLE% %URL%';
+			if ( substr($Facepress_data[$optionIndex+4],0,6) == 'fbfor:' ) 
+			{	
+				$fbPostFormat = substr($Facepress_data[$optionIndex+4],6,strlen($Facepress_data[$optionIndex+4])-6);		
+			}
+			elseif ( substr($Facepress_data[$optionIndex+5],0,6) == 'fbfor:' ) 
+			{	
+				$fbPostFormat = substr($Facepress_data[$optionIndex+5],6,strlen($Facepress_data[$optionIndex+5])-6);		
+			}
+			elseif ( substr($Facepress_data[$optionIndex+6],0,6) == 'fbfor:' ) 
+			{	
+				$fbPostFormat = substr($Facepress_data[$optionIndex+6],6,strlen($Facepress_data[$optionIndex+6])-6);	
+			}
+			else
+			{
+				$fbPostFormat = '%TITLE% %URL%';
+			}
 		}
-
+		
 		$plugins = get_option('active_plugins');
 		$required_plugin = 'twitter-friendly-links/twitter-friendly-links.php';
 		//check to see if Twitter Friendly Links plugin is activated			
