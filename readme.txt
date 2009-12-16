@@ -3,7 +3,7 @@ Contributors: aknox, fullthrottledevelopment
 Donate link: http://fullthrottledevelopment.com
 Tags: facebook, status, wall, authors, users, update, social networks, marketing, social network marketing
 Requires at least: 2.8
-Tested up to: 2.8
+Tested up to: 2.9
 Stable tag: 1.4
 
 Publish your post information by author to your Facebook profile status or to a Facebook Page.
