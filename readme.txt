@@ -3,14 +3,14 @@ Contributors: aknox, fullthrottledevelopment
 Donate link: http://fullthrottledevelopment.com
 Tags: facebook, status, wall, authors, users, update, social networks, marketing, social network marketing
 Requires at least: 2.8
-Tested up to: 2.9
-Stable tag: 1.4
+Tested up to: 2.9.1
+Stable tag: 1.5
 
 Publish your post information by author to your Facebook profile status or to a Facebook Page.
 
 == Description ==
 
-This plugin publishes the title of your post as the status of your Facebook profile. Each WordPress author site can setup his or her own Facebook access. Also, the WordPress post information can be published to a Facebook page for which the WordPress author is an administrator.
+This plugin has been replaced by FT FacePress II. This plugin publishes the title of your post as the status of your Facebook profile. Each WordPress author site can setup his or her own Facebook access. Also, the WordPress post information can be published to a Facebook page for which the WordPress author is an administrator.
   
 **The plugin requires Php4 or higher and Curl library.**     
     
@@ -22,6 +22,9 @@ This plugin publishes the title of your post as the status of your Facebook prof
 4.   The file FacepressSessionFile.txt file in the /wp-content/plugins/ft-facepress/ folder must writable from PHP  
 
 == Changelog ==  
+
+= 1.5 =
+* This plugin has been replaced by a new plugin called FT FacePress II
 
 = 1.4 =
 * Added ability to adjust format for each post.  

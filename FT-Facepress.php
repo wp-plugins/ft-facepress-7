@@ -2,9 +2,9 @@
 /*
 Plugin Name: FT FacePress
 Plugin URI: http://fullthrottledevelopment.com/facepress
-Description: This plugin publishes the title and permalink of your post as the status of your Facebook profile. Each WordPress author can setup his or her own Facebook access. Also, the WordPress post information can be published to a Facebook page for which the WordPress author is an administrator.
+Description: This plugin has been replaced by FT FacePress II. This plugin publishes the title and permalink of your post as the status of your Facebook profile. Each WordPress author can setup his or her own Facebook access. Also, the WordPress post information can be published to a Facebook page for which the WordPress author is an administrator.
 Author: Alan Knox @ FullThrottle Development
-Version: 1.4
+Version: 1.5
 Author URI: http://fullthrottledevelopment.com/
 */
 
@@ -25,6 +25,9 @@ include('Facepress-option.php');
 
 include('Facepress-activation.php');
 
+function facepress_activation_notice(){
+		echo '<div class="error fade"><p><a href="http://wordpress.org/extend/plugins/facepress-ii/" target="_blank">FacePress plugin has been replaced by FacePress II. Remove FacePress and install FacePress II.</a></p></div>';
+}
 
 if (isSet($_GET["checkLogin"]) && $_GET["checkLogin"] == "true") {
 	include('Facepress-check.php');
@@ -45,8 +48,8 @@ if (isSet($_GET["checkLogin"]) && $_GET["checkLogin"] == "true") {
 	add_action('publish_post', 'facepress_meta_tags');
 	add_action('save_post', 'facepress_meta_tags');
 	add_action('edit_page_form', 'facepress_meta_tags');
-	
-
-
+	add_action( 'admin_notices', 'facepress_activation_notice');
 }
+
 ?>
+
